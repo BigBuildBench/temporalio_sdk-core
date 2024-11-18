@@ -1,0 +1,22 @@
+[package]
+name = "rustfsm_procmacro"
+version = "0.1.0"
+authors = ["Spencer Judge <spencer@temporal.io>"]
+edition = "2021"
+license-file = "LICENSE.txt"
+description = "Procmacro sub-crate of the `rustfsm` crate"
+
+[lib]
+proc-macro = true
+
+[[test]]
+name = "tests"
+path = "tests/progress.rs"
+
+[dependencies]
+
+[dev-dependencies]
+trybuild = { version = "1.0", features = ["diff"] }
+
+[package.metadata.workspaces]
+independent = true

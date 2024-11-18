@@ -1,0 +1,60 @@
+[package]
+name = "temporal-sdk-core"
+version = "0.1.0"
+authors = ["Spencer Judge <spencer@temporal.io>", "Vitaly Arbuzov <vitaly@temporal.io>"]
+edition = "2021"
+license-file = { workspace = true }
+description = "Library for building new Temporal SDKs"
+homepage = "https://temporal.io/"
+repository = "https://github.com/temporalio/sdk-core"
+keywords = ["temporal", "workflow"]
+categories = ["development-tools"]
+
+[lib]
+
+[features]
+default = ["otel"]
+otel = ["dep:opentelemetry", "dep:opentelemetry_sdk", "dep:opentelemetry-otlp",
+    "dep:opentelemetry-prometheus", "dep:hyper", "dep:hyper-util", "dep:http-body-util"]
+tokio-console = ["console-subscriber"]
+ephemeral-server = ["dep:flate2", "dep:reqwest", "dep:tar", "dep:zip"]
+
+[dependencies]
+
+[dev-dependencies]
+assert_matches = "1.4"
+bimap = "0.6.1"
+clap = { version = "4.0", features = ["derive"] }
+criterion = "0.5"
+rstest = "0.22"
+temporal-sdk-core-test-utils = { path = "../test-utils" }
+temporal-sdk = { path = "../sdk" }
+tokio-stream = { version = "0.1", features = ["net"] }
+
+[build-dependencies]
+tonic-build = { workspace = true }
+
+[[test]]
+name = "integ_tests"
+path = "../tests/main.rs"
+# Prevents autodiscovery, and hence these getting run with `cargo test`. Run with
+# `cargo test --test integ_tests`
+test = false
+
+[[test]]
+name = "heavy_tests"
+path = "../tests/heavy_tests.rs"
+test = false
+
+[[bench]]
+name = "workflow_replay"
+harness = false
+
+# This is maybe a bit hacky, but we call the runner an "example" because that gets it compiling with
+# the dev-dependencies, which we want.
+[[example]]
+name = "integ_runner"
+path = "../tests/runner.rs"
+
+[lints]
+workspace = true
